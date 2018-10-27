@@ -1,0 +1,20 @@
+{
+  "name": "googleprayers",
+  "version": "1.0.0",
+  "description": "A service for adding prayer times to your Calendar",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "keywords": [
+    "prayers",
+    "calendar",
+    "google",
+    "calendar"
+  ],
+  "author": "Hudhaifah Zahid",
+  "license": "ISC",
+  "dependencies": {
+    "googleapis": "^27.0.0"
+  }
+}
