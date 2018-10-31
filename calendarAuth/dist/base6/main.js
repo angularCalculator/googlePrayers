@@ -136,10 +136,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppModule", function() { return AppModule; });
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
-/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
-/* harmony import */ var _angular_fire__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/fire */ "./node_modules/@angular/fire/index.js");
-/* harmony import */ var _angular_fire_auth__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/fire/auth */ "./node_modules/@angular/fire/auth/index.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
+/* harmony import */ var _angular_fire__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/fire */ "./node_modules/@angular/fire/index.js");
+/* harmony import */ var _angular_fire_auth__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/fire/auth */ "./node_modules/@angular/fire/auth/index.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -152,15 +153,16 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
+
 // Add your project credentials
 // Then use it in the imports section below
 var yourFirebaseConfig = {
-    apiKey: "AIzaSyAbDgY2uRP5yYEBdiwHjbX2QW6UweMABMY",
-    authDomain: "hudz-prayer-calendar.firebaseapp.com",
-    databaseURL: "https://hudz-prayer-calendar.firebaseio.com",
-    projectId: "hudz-prayer-calendar",
-    storageBucket: "hudz-prayer-calendar.appspot.com",
-    messagingSenderId: "761721867628"
+    apiKey: 'AIzaSyAbDgY2uRP5yYEBdiwHjbX2QW6UweMABMY',
+    authDomain: 'hudz-prayer-calendar.firebaseapp.com',
+    databaseURL: 'https://hudz-prayer-calendar.firebaseio.com',
+    projectId: 'hudz-prayer-calendar',
+    storageBucket: 'hudz-prayer-calendar.appspot.com',
+    messagingSenderId: '761721867628'
 };
 var AppModule = /** @class */ (function () {
     function AppModule() {
@@ -168,15 +170,16 @@ var AppModule = /** @class */ (function () {
     AppModule = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
             declarations: [
-                _app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]
+                _app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
-                _app_routing_module__WEBPACK_IMPORTED_MODULE_2__["AppRoutingModule"],
-                _angular_fire__WEBPACK_IMPORTED_MODULE_4__["AngularFireModule"].initializeApp(yourFirebaseConfig),
-                _angular_fire_auth__WEBPACK_IMPORTED_MODULE_5__["AngularFireAuthModule"],
+                _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClientModule"],
+                _app_routing_module__WEBPACK_IMPORTED_MODULE_3__["AppRoutingModule"],
+                _angular_fire__WEBPACK_IMPORTED_MODULE_5__["AngularFireModule"].initializeApp(yourFirebaseConfig),
+                _angular_fire_auth__WEBPACK_IMPORTED_MODULE_6__["AngularFireAuthModule"],
             ],
-            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]]
+            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]
         })
     ], AppModule);
     return AppModule;
@@ -200,6 +203,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_fire_auth__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/fire/auth */ "./node_modules/@angular/fire/auth/index.js");
 /* harmony import */ var firebase_app__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! firebase/app */ "./node_modules/firebase/app/dist/index.cjs.js");
 /* harmony import */ var firebase_app__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(firebase_app__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -247,11 +251,14 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
+
 var AuthService = /** @class */ (function () {
-    function AuthService(afAuth) {
+    function AuthService(afAuth, http) {
         this.afAuth = afAuth;
+        this.http = http;
         this.initClient();
         this.user$ = afAuth.authState;
+        this.getTextIP();
     }
     // Initialize the Google API client with desired scopes
     AuthService.prototype.initClient = function () {
@@ -259,13 +266,42 @@ var AuthService = /** @class */ (function () {
             console.log('loaded client');
             // It's OK to expose these credentials, they are client safe.
             gapi.client.init({
-                apiKey: 'AIzaSyAc9Tt8pQQF3ntu2Tz66iUKl_fXHtdhIyc',
-                clientId: '581326886241-3pthiumf8t14p95siesg028gf9rde5pf.apps.googleusercontent.com',
+                apiKey: 'AIzaSyAbDgY2uRP5yYEBdiwHjbX2QW6UweMABMY',
+                clientId: '761721867628-ru0nib25vauf7q0h5v55el68vjt43lk6.apps.googleusercontent.com',
                 discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
                 scope: 'https://www.googleapis.com/auth/calendar'
             });
             gapi.client.load('calendar', 'v3', function () { return console.log('loaded calendar'); });
         });
+    };
+    AuthService.prototype.getTextIP = function () {
+        var _this = this;
+        this.getIp().subscribe(function (res) {
+            _this.IP = res;
+        }, function (err) {
+            _this.IP = err;
+        });
+    };
+    AuthService.prototype.getIp = function () {
+        var headers = this.getHeaders();
+        return this.http.get('https://api.ipify.org/?format=json', { headers: headers });
+    };
+    AuthService.prototype.getTextPrayerData = function () {
+        var _this = this;
+        this.initPrayerData().subscribe(function (res) {
+            console.log(res);
+            _this.prayerData = res;
+        }, function (err) {
+            _this.IP = err;
+        });
+    };
+    AuthService.prototype.initPrayerData = function () {
+        var headers = this.getHeaders();
+        console.log(this.IP.ip);
+        // const url = 'https://www.islamicfinder.us/index.php/api/prayer_times?latitude=49.2833&longitude=123.1298&timezone=America/Vancouver'
+        // const url = 'https://www.islamicfinder.us/index.php/api/prayer_times?user_ip='+this.IP.ip
+        var url = 'https://api.aladhan.com/v1/calendarByCity?city=Vancouver&country=Canada';
+        return this.http.get(url, { headers: headers });
     };
     AuthService.prototype.login = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -293,17 +329,20 @@ var AuthService = /** @class */ (function () {
     };
     AuthService.prototype.getCalendar = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var events;
+            var data, events;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, gapi.client.calendar.events.list({
-                            calendarId: 'primary',
-                            timeMin: new Date().toISOString(),
-                            showDeleted: false,
-                            singleEvents: true,
-                            maxResults: 10,
-                            orderBy: 'startTime'
-                        })];
+                    case 0:
+                        data = this.getTextPrayerData();
+                        console.log(this.prayerData); // 
+                        return [4 /*yield*/, gapi.client.calendar.events.list({
+                                calendarId: 'primary',
+                                timeMin: new Date().toISOString(),
+                                showDeleted: false,
+                                singleEvents: true,
+                                maxResults: 10,
+                                orderBy: 'startTime'
+                            })];
                     case 1:
                         events = _a.sent();
                         console.log(events);
@@ -315,22 +354,34 @@ var AuthService = /** @class */ (function () {
     };
     AuthService.prototype.insertEvent = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var insert;
+            var data, insert;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, gapi.client.calendar.events.insert({
-                            calendarId: 'primary',
-                            start: {
-                                dateTime: hoursFromNow(2),
-                                timeZone: 'America/Los_Angeles'
-                            },
-                            end: {
-                                dateTime: hoursFromNow(3),
-                                timeZone: 'America/Los_Angeles'
-                            },
-                            summary: 'Have Fun!!!',
-                            description: 'Do some cool stuff and have a fun time doing it'
-                        })];
+                    case 0:
+                        data = this.getTextPrayerData();
+                        console.log(this.prayerData); // 
+                        return [4 /*yield*/, gapi.client.calendar.events.insert({
+                                calendarId: 'primary',
+                                reminders: {
+                                    overrides: [
+                                        {
+                                            method: 'popup',
+                                            minutes: 30
+                                        },
+                                    ],
+                                    useDefault: false
+                                },
+                                start: {
+                                    dateTime: hoursFromNow(1),
+                                    timeZone: 'America/Vancouver'
+                                },
+                                end: {
+                                    dateTime: hoursFromNow(1.5),
+                                    timeZone: 'America/Vancouver'
+                                },
+                                summary: 'Have you prayed Asr?',
+                                description: 'Have you prayed Asr yet? It\'s Maghrib time.'
+                            })];
                     case 1:
                         insert = _a.sent();
                         return [4 /*yield*/, this.getCalendar()];
@@ -341,11 +392,17 @@ var AuthService = /** @class */ (function () {
             });
         });
     };
+    AuthService.prototype.getHeaders = function () {
+        return new _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpHeaders"]({
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        });
+    };
     AuthService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
             providedIn: 'root'
         }),
-        __metadata("design:paramtypes", [_angular_fire_auth__WEBPACK_IMPORTED_MODULE_1__["AngularFireAuth"]])
+        __metadata("design:paramtypes", [_angular_fire_auth__WEBPACK_IMPORTED_MODULE_1__["AngularFireAuth"], _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"]])
     ], AuthService);
     return AuthService;
 }());
@@ -415,7 +472,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/hudhaifahz/Desktop/Code/138-google-calendar-firebase-auth/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /Users/hudhaifahz/Desktop/Code/googlePrayers/calendarAuth/src/main.ts */"./src/main.ts");
 
 
 /***/ })

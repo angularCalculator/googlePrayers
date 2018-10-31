@@ -46,3 +46,5 @@ Thumbs.db
 # Tokens
 node_modules/
 tokens.json
+.netlify/
+dist/
